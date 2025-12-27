@@ -133,14 +133,26 @@ const baseCss = `
   .cart-item, .cart-total { display: flex; justify-content: space-between; }
 `;
 
+function isValidProjectData(data) {
+  return data && (Array.isArray(data.pages) || data.components || data.styles);
+}
+
 async function loadContent() {
   const { html, css, template } = await apiRequest('/site/content');
   if (template) {
-    editor.loadProjectData(JSON.parse(template));
-  } else {
-    editor.setComponents(html || '<main class="page"><h1>Mi sitio</h1></main>');
-    editor.setStyle(css || baseCss);
+    try {
+      const parsed = JSON.parse(template);
+      if (isValidProjectData(parsed)) {
+        editor.loadProjectData(parsed);
+        return;
+      }
+    } catch (error) {
+      // ignore invalid template json
+    }
   }
+
+  editor.setComponents(html || '<main class="page"><h1>Mi sitio</h1></main>');
+  editor.setStyle(`${baseCss}\n${css || ''}`);
 }
 
 async function saveContent() {

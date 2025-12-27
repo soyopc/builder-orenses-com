@@ -1,0 +1,61 @@
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Orenses Builder</title>
+    <link rel="stylesheet" href="/style.css" />
+  </head>
+  <body>
+    <main class="container">
+      <section id="login-section" class="card">
+        <h1>Acceso Builder</h1>
+        <form id="login-form">
+          <label>
+            Email
+            <input type="email" name="email" required />
+          </label>
+          <label>
+            Contraseña
+            <input type="password" name="password" required />
+          </label>
+          <button type="submit">Entrar</button>
+          <p id="login-error" class="error"></p>
+        </form>
+      </section>
+
+      <section id="site-section" class="card hidden">
+        <header class="site-header">
+          <h2>Mi sitio</h2>
+          <button id="logout-btn" class="ghost">Salir</button>
+        </header>
+        <div id="site-info"></div>
+        <div id="site-actions" class="actions"></div>
+        <div id="site-form" class="hidden">
+          <h3>Crear sitio</h3>
+          <label>
+            Slug
+            <input type="text" id="new-slug" placeholder="mi-sitio" />
+          </label>
+          <label>
+            Plantilla
+            <select id="template-select"></select>
+          </label>
+          <button id="create-site-btn">Crear</button>
+          <p id="create-error" class="error"></p>
+        </div>
+        <div id="rename-form" class="hidden">
+          <h3>Renombrar sitio</h3>
+          <label>
+            Nuevo slug
+            <input type="text" id="rename-slug" placeholder="nuevo-slug" />
+          </label>
+          <button id="rename-site-btn">Renombrar</button>
+          <p id="rename-error" class="error"></p>
+        </div>
+      </section>
+    </main>
+
+    <script src="/app.js"></script>
+  </body>
+</html>

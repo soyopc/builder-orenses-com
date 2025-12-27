@@ -1,0 +1,31 @@
+body, html {
+  height: 100%;
+  margin: 0;
+}
+
+#editor-toolbar {
+  height: 56px;
+  background: #111827;
+  color: #fff;
+  display: flex;
+  align-items: center;
+  padding: 0 16px;
+  gap: 12px;
+}
+
+#editor-toolbar button {
+  background: #2563eb;
+  border: none;
+  color: #fff;
+  padding: 8px 14px;
+  border-radius: 6px;
+  cursor: pointer;
+}
+
+#editor-toolbar .spacer {
+  flex: 1;
+}
+
+#gjs {
+  height: calc(100% - 56px);
+}

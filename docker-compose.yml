@@ -14,6 +14,7 @@ services:
       GCS_BUCKET: orenses-sites
     volumes:
       - .:/app
+      - /app/node_modules
       - /mnt/data/orenses.com/grapesjs:/app/data
       - /mnt/data/orenses.com/grapesjs/credentials/gcs.json:/app/credentials/gcs.json:ro
     depends_on:

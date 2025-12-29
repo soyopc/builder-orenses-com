@@ -50,6 +50,7 @@ async function apiRequest(path, options = {}) {
 function showLogin() {
   loginSection.classList.remove('hidden');
   siteSection.classList.add('hidden');
+  window.scrollTo({ top: 0, behavior: 'smooth' });
 }
 
 function showSite() {

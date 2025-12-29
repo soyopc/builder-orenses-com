@@ -7,24 +7,87 @@
     <link rel="stylesheet" href="/style.css" />
   </head>
   <body>
-    <main class="container">
-      <section id="login-section" class="card">
-        <h1>Acceso Builder</h1>
-        <form id="login-form">
-          <label>
-            Email
-            <input type="email" name="email" required />
-          </label>
-          <label>
-            Contraseña
-            <input type="password" name="password" required />
-          </label>
-          <button type="submit">Entrar</button>
-          <p id="login-error" class="error"></p>
-        </form>
+    <main>
+      <section class="hero">
+        <video class="hero-video" autoplay muted loop playsinline>
+          <source src="/assets/home-mov.mov" type="video/mp4" />
+        </video>
+        <div class="hero-overlay"></div>
+        <div class="hero-content">
+          <h1>
+            Crea tu ficha digital hoy mismo. Es más fácil de lo que imaginas. Deja que tus clientes
+            te encuentren, con el creador de Orenses.com
+          </h1>
+          <a class="primary-btn" href="#login-section">&lt;inicia ahora&gt;</a>
+        </div>
       </section>
 
-      <section id="site-section" class="card hidden">
+      <section class="banner">
+        <div class="container banner-grid">
+          <div class="banner-image">
+            <img src="/assets/home-banner.jpg" alt="Testimonio Orenses" />
+          </div>
+          <div class="banner-text">
+            <p>
+              Convertir mi proyecto en realidad con el creador de páginas web de Orenses.com fue muy
+              sencillo, gracias a su facilidad de uso y plantillas listas para usar
+            </p>
+          </div>
+        </div>
+      </section>
+
+      <section id="login-section" class="login-section">
+        <div class="container login-grid">
+          <div class="login-benefits">
+            <h2>Creá una web a tu manera</h2>
+            <p>Personalizá tu web con herramientas intuitivas y fáciles de usar.</p>
+            <ul class="benefits-grid">
+              <li>
+                <div class="benefit-icon">+</div>
+                <h3>Arrastrá y soltá</h3>
+                <p>Seleccioná el contenido que querés reubicar y soltalo en su lugar.</p>
+              </li>
+              <li>
+                <div class="benefit-icon">#</div>
+                <h3>Usá Smart Grid</h3>
+                <p>Mantené todo perfectamente alineado mientras ajustás los detalles.</p>
+              </li>
+              <li>
+                <div class="benefit-icon">Aa</div>
+                <h3>Cambiá colores y fuentes</h3>
+                <p>Encontrá lo que realmente interprete la esencia de tu marca o proyecto.</p>
+              </li>
+              <li>
+                <div class="benefit-icon">[]</div>
+                <h3>Personalizá elementos</h3>
+                <p>Reubicá elementos para crear la web que tenés en mente.</p>
+              </li>
+              <li>
+                <div class="benefit-icon">📱</div>
+                <h3>Edición en escritorio y móvil</h3>
+                <p>Creá, editá y publicá tu web desde cualquier dispositivo.</p>
+              </li>
+            </ul>
+          </div>
+          <div class="login-card">
+            <h2>Acceso Builder</h2>
+            <form id="login-form">
+              <label>
+                Email
+                <input type="email" name="email" required />
+              </label>
+              <label>
+                Contraseña
+                <input type="password" name="password" required />
+              </label>
+              <button class="primary-btn" type="submit">inicia builder</button>
+              <p id="login-error" class="error"></p>
+            </form>
+          </div>
+        </div>
+      </section>
+
+      <section id="site-section" class="card hidden container">
         <header class="site-header">
           <h2>Mi sitio</h2>
           <button id="logout-btn" class="ghost">Salir</button>

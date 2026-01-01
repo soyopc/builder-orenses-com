@@ -19,7 +19,7 @@ dotenv.config();
 
 const app = express();
 const PORT = process.env.PORT || 4007;
-const jwtSecret = process.env.BUILDER_JWT_SECRET;
+const jwtSecret = process.env.BUILDER_JWT_SECRET || process.env.JWT_SECRET;
 const strapiUrl = process.env.STRAPI_URL || 'https://cms.orenses.com/admin/login';
 
 app.use(express.json({ limit: '10mb' }));

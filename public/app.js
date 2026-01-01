@@ -12,6 +12,7 @@ const createError = document.getElementById('create-error');
 const renameForm = document.getElementById('rename-form');
 const renameSiteBtn = document.getElementById('rename-site-btn');
 const renameError = document.getElementById('rename-error');
+const homeSections = document.getElementById('home-sections');
 
 const API_BASE = '/api';
 
@@ -50,12 +51,18 @@ async function apiRequest(path, options = {}) {
 function showLogin() {
   loginSection.classList.remove('hidden');
   siteSection.classList.add('hidden');
+  if (homeSections) {
+    homeSections.classList.remove('hidden');
+  }
   window.scrollTo({ top: 0, behavior: 'smooth' });
 }
 
 function showSite() {
   loginSection.classList.add('hidden');
   siteSection.classList.remove('hidden');
+  if (homeSections) {
+    homeSections.classList.add('hidden');
+  }
 }
 
 async function loadTemplates() {

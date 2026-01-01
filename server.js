@@ -25,7 +25,7 @@ const strapiUrl = process.env.STRAPI_URL || 'https://cms.orenses.com/admin/login
 app.use(express.json({ limit: '10mb' }));
 app.use(morgan('combined'));
 app.use(rateLimit({ windowMs: 60 * 1000, max: 120 }));
-app.use(express.static('public'));
+app.use(express.static('builder-orenses-com/public'));
 
 app.post('/api/auth/login', async (req, res) => {
   const { email, password } = req.body || {};

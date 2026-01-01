@@ -156,14 +156,20 @@ if (loginForm) {
         body: JSON.stringify(payload)
       });
       if (!response.ok) {
-        throw new Error('login_failed');
+        const errorPayload = await response.json().catch(() => ({}));
+        throw new Error(errorPayload?.error || 'login_failed');
       }
       const data = await response.json();
       setToken(data.token);
       window.location.href = '/dashboard.html';
     } catch (error) {
       if (loginError) {
-        loginError.textContent = 'Credenciales inválidas o error de conexión.';
+        loginError.textContent =
+          error.message === 'missing_jwt_secret'
+            ? 'Falta configurar BUILDER_JWT_SECRET en el servidor.'
+            : error.message === 'invalid_login'
+              ? 'Credenciales inválidas.'
+              : 'Error de conexión o servidor.';
       }
     }
   });

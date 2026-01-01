@@ -32,6 +32,9 @@ app.post('/api/auth/login', async (req, res) => {
   if (!email || !password) {
     return res.status(400).json({ error: 'missing_credentials' });
   }
+  if (!jwtSecret) {
+    return res.status(500).json({ error: 'missing_jwt_secret' });
+  }
 
   try {
     const response = await fetch(strapiUrl, {
@@ -41,7 +44,8 @@ app.post('/api/auth/login', async (req, res) => {
     });
 
     if (!response.ok) {
-      return res.status(401).json({ error: 'invalid_login' });
+      const payload = await response.json().catch(() => ({}));
+      return res.status(401).json({ error: payload?.error || 'invalid_login' });
     }
 
     const data = await response.json();
@@ -61,6 +65,7 @@ app.post('/api/auth/login', async (req, res) => {
     const token = jwt.sign(payload, jwtSecret, { expiresIn: '8h' });
     return res.json({ token, user: payload });
   } catch (error) {
+    console.error('login_failed', error);
     return res.status(500).json({ error: 'login_failed' });
   }
 });

@@ -204,7 +204,7 @@ button.ghost {
   position: relative;
   min-height: 100vh;
   padding: 80px 0;
-  background: url("/assets/home-login.webp") center/cover no-repeat;
+  background: url("/assets/home-login.avif") center/cover no-repeat;
 }
 
 .dashboard-overlay {

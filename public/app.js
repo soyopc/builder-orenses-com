@@ -12,6 +12,10 @@ const createError = document.getElementById('create-error');
 const renameForm = document.getElementById('rename-form');
 const renameSiteBtn = document.getElementById('rename-site-btn');
 const renameError = document.getElementById('rename-error');
+const templateChangeForm = document.getElementById('template-change-form');
+const templateChangeSelect = document.getElementById('template-change-select');
+const applyTemplateBtn = document.getElementById('apply-template-btn');
+const templateChangeError = document.getElementById('template-change-error');
 const homeSections = document.getElementById('home-sections');
 const onHome = Boolean(homeSections);
 const onDashboard = Boolean(siteSection);
@@ -75,9 +79,9 @@ function showSite() {
   }
 }
 
-async function loadTemplates() {
+async function loadTemplatesInto(selectEl) {
   const { templates } = await apiRequest('/templates');
-  templateSelect.innerHTML = templates
+  selectEl.innerHTML = templates
     .map((template) => `<option value="${template}">${template}</option>`)
     .join('');
 }
@@ -88,11 +92,14 @@ async function loadSite() {
   siteInfo.innerHTML = '';
   siteForm.classList.add('hidden');
   renameForm.classList.add('hidden');
+  if (templateChangeForm) {
+    templateChangeForm.classList.add('hidden');
+  }
 
   if (!site) {
     siteInfo.innerHTML = '<p>No tienes un sitio aún.</p>';
     siteForm.classList.remove('hidden');
-    await loadTemplates();
+    await loadTemplatesInto(templateSelect);
     return;
   }
 
@@ -114,7 +121,20 @@ async function loadSite() {
     renameForm.classList.toggle('hidden');
   });
 
-  siteActions.append(editBtn, renameBtn);
+  const changeTemplateBtn = document.createElement('button');
+  changeTemplateBtn.textContent = 'Cambiar plantilla';
+  changeTemplateBtn.classList.add('ghost');
+  changeTemplateBtn.addEventListener('click', async () => {
+    if (!templateChangeForm || !templateChangeSelect) {
+      return;
+    }
+    templateChangeForm.classList.toggle('hidden');
+    if (!templateChangeForm.classList.contains('hidden')) {
+      await loadTemplatesInto(templateChangeSelect);
+    }
+  });
+
+  siteActions.append(editBtn, renameBtn, changeTemplateBtn);
 }
 
 if (loginForm) {
@@ -194,6 +214,33 @@ if (renameSiteBtn) {
     } catch (error) {
       if (renameError) {
         renameError.textContent = 'No se pudo renombrar el sitio.';
+      }
+    }
+  });
+}
+
+if (applyTemplateBtn) {
+  applyTemplateBtn.addEventListener('click', async () => {
+    if (templateChangeError) {
+      templateChangeError.textContent = '';
+    }
+    const templateKey = templateChangeSelect?.value;
+    if (!templateKey) {
+      if (templateChangeError) {
+        templateChangeError.textContent = 'Selecciona una plantilla válida.';
+      }
+      return;
+    }
+
+    try {
+      await apiRequest('/site/template', {
+        method: 'PATCH',
+        body: JSON.stringify({ templateKey })
+      });
+      await loadSite();
+    } catch (error) {
+      if (templateChangeError) {
+        templateChangeError.textContent = 'No se pudo cambiar la plantilla.';
       }
     }
   });

@@ -36,3 +36,14 @@ export async function renameSite({ adminId, slug, gcsPrefix }) {
   );
   return rows[0] || null;
 }
+
+export async function updateSiteTemplate({ adminId, templateKey }) {
+  const { rows } = await pool.query(
+    `UPDATE builder_sites
+     SET template_key = $1
+     WHERE admin_id = $2
+     RETURNING *`,
+    [templateKey, adminId]
+  );
+  return rows[0] || null;
+}

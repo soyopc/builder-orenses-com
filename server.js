@@ -5,7 +5,14 @@ import jwt from 'jsonwebtoken';
 import dotenv from 'dotenv';
 
 import { authRequired } from './middleware/auth.js';
-import { pool, getSiteByAdmin, getSiteBySlug, createSite, renameSite } from './db/index.js';
+import {
+  pool,
+  getSiteByAdmin,
+  getSiteBySlug,
+  createSite,
+  renameSite,
+  updateSiteTemplate
+} from './db/index.js';
 import { listTemplates, readFile, writeFile, copyPrefix, movePrefix } from './lib/gcs.js';
 
 dotenv.config();
@@ -139,6 +146,33 @@ app.patch('/api/site/rename', async (req, res) => {
     return res.json({ site: updated });
   } catch (error) {
     return res.status(500).json({ error: 'site_rename_failed' });
+  }
+});
+
+app.patch('/api/site/template', async (req, res) => {
+  const { templateKey } = req.body || {};
+  if (!templateKey) {
+    return res.status(400).json({ error: 'missing_template' });
+  }
+
+  try {
+    const site = await getSiteByAdmin(req.user.sub);
+    if (!site) {
+      return res.status(404).json({ error: 'site_not_found' });
+    }
+
+    const templates = await listTemplates();
+    if (!templates.includes(templateKey)) {
+      return res.status(400).json({ error: 'invalid_template' });
+    }
+
+    const prefix = site.gcs_prefix || `u/${site.slug}`;
+    await copyPrefix(`templates/${templateKey}`, prefix);
+    const updated = await updateSiteTemplate({ adminId: req.user.sub, templateKey });
+
+    return res.json({ site: updated });
+  } catch (error) {
+    return res.status(500).json({ error: 'template_update_failed' });
   }
 });
 

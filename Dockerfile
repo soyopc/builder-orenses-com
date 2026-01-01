@@ -10,4 +10,6 @@ COPY . .
 ENV NODE_ENV=production
 EXPOSE 4007
 
-CMD ["node", "server.js"]
+RUN chmod +x /app/scripts/entrypoint.sh
+
+CMD ["/app/scripts/entrypoint.sh"]

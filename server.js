@@ -105,7 +105,9 @@ app.post('/api/site', async (req, res) => {
     }
 
     const gcsPrefix = `u/${slug}`;
-    await copyPrefix(`templates/${templateKey}`, gcsPrefix);
+    const templatePrefix = `templates/${templateKey}/`;
+    const destinationPrefix = `${gcsPrefix}/`;
+    await copyPrefix(templatePrefix, destinationPrefix);
     const site = await createSite({
       adminId: req.user.sub,
       slug,
@@ -150,7 +152,7 @@ app.patch('/api/site/rename', async (req, res) => {
 });
 
 app.patch('/api/site/template', async (req, res) => {
-  const { templateKey } = req.body || {};
+  const templateKey = (req.body?.templateKey || '').trim();
   if (!templateKey) {
     return res.status(400).json({ error: 'missing_template' });
   }
@@ -167,7 +169,9 @@ app.patch('/api/site/template', async (req, res) => {
     }
 
     const prefix = site.gcs_prefix || `u/${site.slug}`;
-    await copyPrefix(`templates/${templateKey}`, prefix);
+    const templatePrefix = `templates/${templateKey}/`;
+    const destinationPrefix = `${prefix}/`;
+    await copyPrefix(templatePrefix, destinationPrefix);
     const updated = await updateSiteTemplate({ adminId: req.user.sub, templateKey });
 
     return res.json({ site: updated });

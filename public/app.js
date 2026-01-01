@@ -224,7 +224,7 @@ if (applyTemplateBtn) {
     if (templateChangeError) {
       templateChangeError.textContent = '';
     }
-    const templateKey = templateChangeSelect?.value;
+    const templateKey = templateChangeSelect?.value?.trim();
     if (!templateKey) {
       if (templateChangeError) {
         templateChangeError.textContent = 'Selecciona una plantilla válida.';
@@ -239,8 +239,14 @@ if (applyTemplateBtn) {
       });
       await loadSite();
     } catch (error) {
+      const message = error?.message || 'template_update_failed';
       if (templateChangeError) {
-        templateChangeError.textContent = 'No se pudo cambiar la plantilla.';
+        templateChangeError.textContent =
+          message === 'invalid_template'
+            ? 'La plantilla seleccionada no es válida.'
+            : message === 'template_update_failed'
+              ? 'No se pudo cambiar la plantilla.'
+              : `Error al cambiar la plantilla: ${message}`;
       }
     }
   });

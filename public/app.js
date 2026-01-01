@@ -13,6 +13,8 @@ const renameForm = document.getElementById('rename-form');
 const renameSiteBtn = document.getElementById('rename-site-btn');
 const renameError = document.getElementById('rename-error');
 const homeSections = document.getElementById('home-sections');
+const onHome = Boolean(homeSections);
+const onDashboard = Boolean(siteSection);
 
 const API_BASE = '/api';
 
@@ -49,8 +51,12 @@ async function apiRequest(path, options = {}) {
 }
 
 function showLogin() {
-  loginSection.classList.remove('hidden');
-  siteSection.classList.add('hidden');
+  if (loginSection) {
+    loginSection.classList.remove('hidden');
+  }
+  if (siteSection) {
+    siteSection.classList.add('hidden');
+  }
   if (homeSections) {
     homeSections.classList.remove('hidden');
   }
@@ -58,8 +64,12 @@ function showLogin() {
 }
 
 function showSite() {
-  loginSection.classList.add('hidden');
-  siteSection.classList.remove('hidden');
+  if (loginSection) {
+    loginSection.classList.add('hidden');
+  }
+  if (siteSection) {
+    siteSection.classList.remove('hidden');
+  }
   if (homeSections) {
     homeSections.classList.add('hidden');
   }
@@ -107,78 +117,108 @@ async function loadSite() {
   siteActions.append(editBtn, renameBtn);
 }
 
-loginForm.addEventListener('submit', async (event) => {
-  event.preventDefault();
-  loginError.textContent = '';
-  const formData = new FormData(loginForm);
-  const payload = {
-    email: formData.get('email'),
-    password: formData.get('password')
-  };
-
-  try {
-    const response = await fetch('/api/auth/login', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(payload)
-    });
-    if (!response.ok) {
-      throw new Error('login_failed');
+if (loginForm) {
+  loginForm.addEventListener('submit', async (event) => {
+    event.preventDefault();
+    if (loginError) {
+      loginError.textContent = '';
     }
-    const data = await response.json();
-    setToken(data.token);
-    showSite();
-    await loadSite();
-  } catch (error) {
-    loginError.textContent = 'Credenciales inválidas o error de conexión.';
-  }
-});
+    const formData = new FormData(loginForm);
+    const payload = {
+      email: formData.get('email'),
+      password: formData.get('password')
+    };
 
-logoutBtn.addEventListener('click', () => {
-  clearToken();
-  showLogin();
-});
+    try {
+      const response = await fetch('/api/auth/login', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(payload)
+      });
+      if (!response.ok) {
+        throw new Error('login_failed');
+      }
+      const data = await response.json();
+      setToken(data.token);
+      window.location.href = '/dashboard.html';
+    } catch (error) {
+      if (loginError) {
+        loginError.textContent = 'Credenciales inválidas o error de conexión.';
+      }
+    }
+  });
+}
 
-createSiteBtn.addEventListener('click', async () => {
-  createError.textContent = '';
-  const slug = document.getElementById('new-slug').value.trim();
-  const templateKey = templateSelect.value;
+if (logoutBtn) {
+  logoutBtn.addEventListener('click', () => {
+    clearToken();
+    window.location.href = '/';
+  });
+}
 
-  try {
-    await apiRequest('/site', {
-      method: 'POST',
-      body: JSON.stringify({ slug, templateKey })
-    });
-    await loadSite();
-  } catch (error) {
-    createError.textContent = 'No se pudo crear el sitio. Verifica el slug.';
-  }
-});
+if (createSiteBtn) {
+  createSiteBtn.addEventListener('click', async () => {
+    if (createError) {
+      createError.textContent = '';
+    }
+    const slug = document.getElementById('new-slug').value.trim();
+    const templateKey = templateSelect.value;
 
-renameSiteBtn.addEventListener('click', async () => {
-  renameError.textContent = '';
-  const slug = document.getElementById('rename-slug').value.trim();
+    try {
+      await apiRequest('/site', {
+        method: 'POST',
+        body: JSON.stringify({ slug, templateKey })
+      });
+      await loadSite();
+    } catch (error) {
+      if (createError) {
+        createError.textContent = 'No se pudo crear el sitio. Verifica el slug.';
+      }
+    }
+  });
+}
 
-  try {
-    await apiRequest('/site/rename', {
-      method: 'PATCH',
-      body: JSON.stringify({ slug })
-    });
-    await loadSite();
-  } catch (error) {
-    renameError.textContent = 'No se pudo renombrar el sitio.';
-  }
-});
+if (renameSiteBtn) {
+  renameSiteBtn.addEventListener('click', async () => {
+    if (renameError) {
+      renameError.textContent = '';
+    }
+    const slug = document.getElementById('rename-slug').value.trim();
+
+    try {
+      await apiRequest('/site/rename', {
+        method: 'PATCH',
+        body: JSON.stringify({ slug })
+      });
+      await loadSite();
+    } catch (error) {
+      if (renameError) {
+        renameError.textContent = 'No se pudo renombrar el sitio.';
+      }
+    }
+  });
+}
 
 (async () => {
-  if (getToken()) {
+  const token = getToken();
+  if (onHome && token) {
+    window.location.href = '/dashboard.html';
+    return;
+  }
+  if (onDashboard && !token) {
+    window.location.href = '/';
+    return;
+  }
+
+  if (onDashboard && token) {
     showSite();
     try {
       await loadSite();
     } catch (error) {
-      showLogin();
+      clearToken();
+      window.location.href = '/';
     }
-  } else {
+  } else if (onHome) {
     showLogin();
   }
 })();

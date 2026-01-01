@@ -13,7 +13,7 @@ import {
   renameSite,
   updateSiteTemplate
 } from './db/index.js';
-import { listTemplates, readFile, writeFile, copyPrefix, movePrefix } from './lib/gcs.js';
+import { listTemplates, readFile, writeFile, copyPrefix, movePrefix, deletePrefix } from './lib/gcs.js';
 
 dotenv.config();
 
@@ -171,6 +171,7 @@ app.patch('/api/site/template', async (req, res) => {
     const prefix = site.gcs_prefix || `u/${site.slug}`;
     const templatePrefix = `templates/${templateKey}/`;
     const destinationPrefix = `${prefix}/`;
+    await deletePrefix(destinationPrefix);
     await copyPrefix(templatePrefix, destinationPrefix);
     const updated = await updateSiteTemplate({ adminId: req.user.sub, templateKey });
 

@@ -220,9 +220,7 @@ document.addEventListener('DOMContentLoaded', () => {
   const sourceTextarea = document.getElementById('source-textarea');
   const sourceSave = document.getElementById('source-save');
   const sourceClose = document.getElementById('source-close');
-  const saveBtn = document.getElementById('save-btn');
   const publishBtn = document.getElementById('publish-btn');
-  const saveBanner = document.getElementById('save-banner');
   const editorStatus = document.createElement('div');
   editorStatus.id = 'editor-status';
   document.body.appendChild(editorStatus);
@@ -235,9 +233,7 @@ document.addEventListener('DOMContentLoaded', () => {
     !sourceTextarea && 'source-textarea',
     !sourceSave && 'source-save',
     !sourceClose && 'source-close',
-    !saveBtn && 'save-btn',
     !publishBtn && 'publish-btn',
-    !saveBanner && 'save-banner'
   ].filter(Boolean);
 
   if (missing.length > 0) {
@@ -327,22 +323,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
   editor.on('asset:close', () => {
     lastSelectedComponent = null;
-  });
-
-  saveBtn.addEventListener('click', async () => {
-    saveBtn.textContent = 'Guardando...';
-    try {
-      await saveContent();
-      saveBtn.textContent = 'Guardado';
-      saveBanner.classList.remove('hidden');
-      setTimeout(() => saveBanner.classList.add('hidden'), 2000);
-      editorStatus.textContent = 'Grabado !!';
-    } catch (error) {
-      saveBtn.textContent = 'Error';
-      alert(`Error al guardar: ${error.message}`);
-      editorStatus.textContent = `Error al guardar: ${error.message}`;
-    }
-    setTimeout(() => (saveBtn.textContent = 'Guardar'), 1500);
   });
 
   publishBtn.addEventListener('click', async () => {

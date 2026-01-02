@@ -213,6 +213,11 @@ loadAssets();
 
 const backBtn = document.getElementById('back-btn');
 const assetsLibraryBtn = document.getElementById('assets-library-btn');
+const sourceBtn = document.getElementById('source-btn');
+const sourceModal = document.getElementById('source-modal');
+const sourceTextarea = document.getElementById('source-textarea');
+const sourceSave = document.getElementById('source-save');
+const sourceClose = document.getElementById('source-close');
 const saveBtn = document.getElementById('save-btn');
 const publishBtn = document.getElementById('publish-btn');
 
@@ -223,6 +228,27 @@ backBtn.addEventListener('click', () => {
 assetsLibraryBtn.addEventListener('click', () => {
   lastSelectedComponent = editor.getSelected();
   editor.runCommand('open-assets');
+});
+
+sourceBtn.addEventListener('click', () => {
+  const html = editor.getHtml();
+  const css = editor.getCss();
+  sourceTextarea.value = `<!-- HTML -->\n${html}\n\n<!-- CSS -->\n${css}\n`;
+  sourceModal.classList.remove('hidden');
+});
+
+sourceClose.addEventListener('click', () => {
+  sourceModal.classList.add('hidden');
+});
+
+sourceSave.addEventListener('click', () => {
+  const raw = sourceTextarea.value;
+  const parts = raw.split('<!-- CSS -->');
+  const htmlPart = parts[0]?.replace('<!-- HTML -->', '').trim() || '';
+  const cssPart = parts[1]?.trim() || '';
+  editor.setComponents(htmlPart || '<main></main>');
+  editor.setStyle(`${baseCss}\n${cssPart}`);
+  sourceModal.classList.add('hidden');
 });
 
 editor.on('asset:select', insertSelectedAsset);

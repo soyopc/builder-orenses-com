@@ -12,10 +12,23 @@
       <button id="back-btn">Volver</button>
       <button id="assets-library-btn" class="secondary">Biblioteca</button>
       <div class="spacer"></div>
+      <button id="source-btn" class="secondary">Editar código</button>
       <button id="save-btn">Guardar</button>
       <button id="publish-btn">Publicar</button>
     </div>
     <div id="gjs"></div>
+    <div id="source-modal" class="modal hidden">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h3>Editar código fuente</h3>
+          <button id="source-close" class="secondary">Cerrar</button>
+        </div>
+        <textarea id="source-textarea"></textarea>
+        <div class="modal-actions">
+          <button id="source-save">Aplicar cambios</button>
+        </div>
+      </div>
+    </div>
 
     <script src="https://unpkg.com/grapesjs"></script>
     <script type="module" src="/editor.js"></script>

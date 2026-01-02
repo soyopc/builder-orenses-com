@@ -196,6 +196,7 @@ loadAssets();
 
 const backBtn = document.getElementById('back-btn');
 const assetsBtn = document.getElementById('assets-btn');
+const assetsLibraryBtn = document.getElementById('assets-library-btn');
 const saveBtn = document.getElementById('save-btn');
 const publishBtn = document.getElementById('publish-btn');
 
@@ -204,6 +205,10 @@ backBtn.addEventListener('click', () => {
 });
 
 assetsBtn.addEventListener('click', () => {
+  editor.runCommand('open-assets');
+});
+
+assetsLibraryBtn.addEventListener('click', () => {
   editor.runCommand('open-assets');
 });
 

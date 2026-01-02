@@ -211,127 +211,129 @@ loadContent().catch(() => {
 
 loadAssets();
 
-const backBtn = document.getElementById('back-btn');
-const assetsLibraryBtn = document.getElementById('assets-library-btn');
-const sourceBtn = document.getElementById('source-btn');
-const sourceModal = document.getElementById('source-modal');
-const sourceTextarea = document.getElementById('source-textarea');
-const sourceSave = document.getElementById('source-save');
-const sourceClose = document.getElementById('source-close');
-const saveBtn = document.getElementById('save-btn');
-const publishBtn = document.getElementById('publish-btn');
-const saveBanner = document.getElementById('save-banner');
-const editorStatus = document.createElement('div');
-editorStatus.id = 'editor-status';
-document.body.appendChild(editorStatus);
+document.addEventListener('DOMContentLoaded', () => {
+  const backBtn = document.getElementById('back-btn');
+  const assetsLibraryBtn = document.getElementById('assets-library-btn');
+  const sourceBtn = document.getElementById('source-btn');
+  const sourceModal = document.getElementById('source-modal');
+  const sourceTextarea = document.getElementById('source-textarea');
+  const sourceSave = document.getElementById('source-save');
+  const sourceClose = document.getElementById('source-close');
+  const saveBtn = document.getElementById('save-btn');
+  const publishBtn = document.getElementById('publish-btn');
+  const saveBanner = document.getElementById('save-banner');
+  const editorStatus = document.createElement('div');
+  editorStatus.id = 'editor-status';
+  document.body.appendChild(editorStatus);
 
-const openSourceModal = () => {
-  const html = editor.getHtml();
-  const css = editor.getCss();
-  sourceTextarea.value = `<!-- HTML -->\n${html}\n\n<!-- CSS -->\n${css}\n`;
-  sourceModal.classList.remove('hidden');
-};
+  const openSourceModal = () => {
+    const html = editor.getHtml();
+    const css = editor.getCss();
+    sourceTextarea.value = `<!-- HTML -->\n${html}\n\n<!-- CSS -->\n${css}\n`;
+    sourceModal.classList.remove('hidden');
+  };
 
-backBtn.addEventListener('click', () => {
-  window.location.href = '/';
-});
+  backBtn.addEventListener('click', () => {
+    window.location.href = '/';
+  });
 
-assetsLibraryBtn.addEventListener('click', () => {
-  lastSelectedComponent = editor.getSelected();
-  editor.runCommand('open-assets');
-});
-
-sourceBtn.addEventListener('click', openSourceModal);
-
-sourceClose.addEventListener('click', () => {
-  sourceModal.classList.add('hidden');
-});
-
-sourceSave.addEventListener('click', () => {
-  const raw = sourceTextarea.value;
-  const parts = raw.split('<!-- CSS -->');
-  const htmlPart = parts[0]?.replace('<!-- HTML -->', '').trim() || '';
-  const cssPart = parts[1]?.trim() || '';
-  editor.setComponents(htmlPart || '<main></main>');
-  editor.setStyle(`${baseCss}\n${cssPart}`);
-  sourceModal.classList.add('hidden');
-});
-
-editor.on('asset:select', insertSelectedAsset);
-
-editor.Commands.add('open-source', {
-  run() {
-    openSourceModal();
-  }
-});
-
-editor.Panels.addButton('options', {
-  id: 'edit-source',
-  label: '</>',
-  command: 'open-source',
-  attributes: { title: 'Editar código' }
-});
-
-function handleDoubleClick(event) {
-  const target = event.target;
-  const element = target?.closest?.('[data-asset],[data-asset-id],.gjs-am-asset,.gjs-am-item');
-  if (!element) {
-    return;
-  }
-  const src =
-    element.getAttribute('data-asset') ||
-    element.getAttribute('data-asset-src') ||
-    element.getAttribute('data-src') ||
-    element.querySelector?.('img')?.getAttribute?.('src');
-  if (!src) {
-    return;
-  }
-  insertSelectedAsset(src);
-}
-
-editor.AssetManager.on('open', () => {
-  const container = editor.AssetManager.getContainer();
-  if (!container) {
-    return;
-  }
-  if (!lastSelectedComponent) {
+  assetsLibraryBtn.addEventListener('click', () => {
     lastSelectedComponent = editor.getSelected();
-  }
-  container.removeEventListener('dblclick', handleDoubleClick);
-  container.addEventListener('dblclick', handleDoubleClick);
-});
+    editor.runCommand('open-assets');
+  });
 
-editor.AssetManager.on('close', () => {
-  lastSelectedComponent = null;
-});
+  sourceBtn.addEventListener('click', openSourceModal);
 
-saveBtn.addEventListener('click', async () => {
-  saveBtn.textContent = 'Guardando...';
-  try {
-    await saveContent();
-    saveBtn.textContent = 'Guardado';
-    saveBanner.classList.remove('hidden');
-    setTimeout(() => saveBanner.classList.add('hidden'), 2000);
-    editorStatus.textContent = 'Grabado !!';
-  } catch (error) {
-    saveBtn.textContent = 'Error';
-    alert(`Error al guardar: ${error.message}`);
-    editorStatus.textContent = `Error al guardar: ${error.message}`;
-  }
-  setTimeout(() => (saveBtn.textContent = 'Guardar'), 1500);
-});
+  sourceClose.addEventListener('click', () => {
+    sourceModal.classList.add('hidden');
+  });
 
-publishBtn.addEventListener('click', async () => {
-  publishBtn.textContent = 'Publicando...';
-  try {
-    await saveContent();
-    const { url } = await publishSite();
-    publishBtn.textContent = 'Publicado';
-    editorStatus.textContent = `Publicado: ${url}`;
-  } catch (error) {
-    publishBtn.textContent = 'Error';
-    alert(`Error al publicar: ${error.message}`);
-    editorStatus.textContent = `Error al publicar: ${error.message}`;
+  sourceSave.addEventListener('click', () => {
+    const raw = sourceTextarea.value;
+    const parts = raw.split('<!-- CSS -->');
+    const htmlPart = parts[0]?.replace('<!-- HTML -->', '').trim() || '';
+    const cssPart = parts[1]?.trim() || '';
+    editor.setComponents(htmlPart || '<main></main>');
+    editor.setStyle(`${baseCss}\n${cssPart}`);
+    sourceModal.classList.add('hidden');
+  });
+
+  editor.on('asset:select', insertSelectedAsset);
+
+  editor.Commands.add('open-source', {
+    run() {
+      openSourceModal();
+    }
+  });
+
+  editor.Panels.addButton('options', {
+    id: 'edit-source',
+    label: '</>',
+    command: 'open-source',
+    attributes: { title: 'Editar código' }
+  });
+
+  function handleDoubleClick(event) {
+    const target = event.target;
+    const element = target?.closest?.('[data-asset],[data-asset-id],.gjs-am-asset,.gjs-am-item');
+    if (!element) {
+      return;
+    }
+    const src =
+      element.getAttribute('data-asset') ||
+      element.getAttribute('data-asset-src') ||
+      element.getAttribute('data-src') ||
+      element.querySelector?.('img')?.getAttribute?.('src');
+    if (!src) {
+      return;
+    }
+    insertSelectedAsset(src);
   }
-  setTimeout(() => (publishBtn.textContent = 'Publicar'), 1500);
+
+  editor.AssetManager.on('open', () => {
+    const container = editor.AssetManager.getContainer();
+    if (!container) {
+      return;
+    }
+    if (!lastSelectedComponent) {
+      lastSelectedComponent = editor.getSelected();
+    }
+    container.removeEventListener('dblclick', handleDoubleClick);
+    container.addEventListener('dblclick', handleDoubleClick);
+  });
+
+  editor.AssetManager.on('close', () => {
+    lastSelectedComponent = null;
+  });
+
+  saveBtn.addEventListener('click', async () => {
+    saveBtn.textContent = 'Guardando...';
+    try {
+      await saveContent();
+      saveBtn.textContent = 'Guardado';
+      saveBanner.classList.remove('hidden');
+      setTimeout(() => saveBanner.classList.add('hidden'), 2000);
+      editorStatus.textContent = 'Grabado !!';
+    } catch (error) {
+      saveBtn.textContent = 'Error';
+      alert(`Error al guardar: ${error.message}`);
+      editorStatus.textContent = `Error al guardar: ${error.message}`;
+    }
+    setTimeout(() => (saveBtn.textContent = 'Guardar'), 1500);
+  });
+
+  publishBtn.addEventListener('click', async () => {
+    publishBtn.textContent = 'Publicando...';
+    try {
+      await saveContent();
+      const { url } = await publishSite();
+      publishBtn.textContent = 'Publicado';
+      editorStatus.textContent = `Publicado: ${url}`;
+    } catch (error) {
+      publishBtn.textContent = 'Error';
+      alert(`Error al publicar: ${error.message}`);
+      editorStatus.textContent = `Error al publicar: ${error.message}`;
+    }
+    setTimeout(() => (publishBtn.textContent = 'Publicar'), 1500);
+  });
 });

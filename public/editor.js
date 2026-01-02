@@ -195,7 +195,6 @@ loadContent().catch(() => {
 loadAssets();
 
 const backBtn = document.getElementById('back-btn');
-const assetsBtn = document.getElementById('assets-btn');
 const assetsLibraryBtn = document.getElementById('assets-library-btn');
 const saveBtn = document.getElementById('save-btn');
 const publishBtn = document.getElementById('publish-btn');
@@ -204,12 +203,22 @@ backBtn.addEventListener('click', () => {
   window.location.href = '/';
 });
 
-assetsBtn.addEventListener('click', () => {
+assetsLibraryBtn.addEventListener('click', () => {
   editor.runCommand('open-assets');
 });
 
-assetsLibraryBtn.addEventListener('click', () => {
-  editor.runCommand('open-assets');
+editor.AssetManager.on('asset:select', (asset) => {
+  const src = asset.get('src') || asset.get('url');
+  if (!src) {
+    return;
+  }
+  const selected = editor.getSelected();
+  if (selected && selected.is('image')) {
+    selected.set('src', src);
+  } else {
+    editor.addComponents(`<img src="${src}" alt="" />`);
+  }
+  editor.AssetManager.close();
 });
 
 saveBtn.addEventListener('click', async () => {

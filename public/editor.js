@@ -220,6 +220,7 @@ const sourceSave = document.getElementById('source-save');
 const sourceClose = document.getElementById('source-close');
 const saveBtn = document.getElementById('save-btn');
 const publishBtn = document.getElementById('publish-btn');
+const saveBanner = document.getElementById('save-banner');
 
 const openSourceModal = () => {
   const html = editor.getHtml();
@@ -306,6 +307,8 @@ saveBtn.addEventListener('click', async () => {
   try {
     await saveContent();
     saveBtn.textContent = 'Guardado';
+    saveBanner.classList.remove('hidden');
+    setTimeout(() => saveBanner.classList.add('hidden'), 2000);
   } catch (error) {
     saveBtn.textContent = 'Error';
     alert(`Error al guardar: ${error.message}`);

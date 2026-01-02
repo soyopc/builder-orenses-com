@@ -35,6 +35,23 @@ body, html {
   height: calc(100% - 56px);
 }
 
+.save-banner {
+  position: fixed;
+  top: 72px;
+  right: 24px;
+  background: #16a34a;
+  color: #fff;
+  padding: 10px 16px;
+  border-radius: 8px;
+  font-weight: 700;
+  box-shadow: 0 12px 24px rgba(22, 163, 74, 0.2);
+  z-index: 60;
+}
+
+.save-banner.hidden {
+  display: none;
+}
+
 .modal {
   position: fixed;
   inset: 0;

@@ -14,16 +14,19 @@ if (!token) {
   window.location.href = '/';
 }
 
+let lastSelectedComponent = null;
+
 const insertSelectedAsset = (asset) => {
   const src = typeof asset === 'string' ? asset : asset?.get?.('src') || asset?.src;
   if (!src) {
     return;
   }
-  const selected = editor.getSelected();
+  const selected = lastSelectedComponent || editor.getSelected();
   if (selected && selected.is('image')) {
     selected.set('src', src);
   } else {
-    editor.addComponents(`<img src="${src}" alt="" />`);
+    const target = selected || editor.getWrapper();
+    editor.addComponents(`<img src="${src}" alt="" />`, { target });
   }
   editor.AssetManager.close();
 };
@@ -218,6 +221,7 @@ backBtn.addEventListener('click', () => {
 });
 
 assetsLibraryBtn.addEventListener('click', () => {
+  lastSelectedComponent = editor.getSelected();
   editor.runCommand('open-assets');
 });
 
@@ -225,7 +229,7 @@ editor.on('asset:select', insertSelectedAsset);
 
 function handleDoubleClick(event) {
   const target = event.target;
-  const element = target?.closest?.('[data-asset],[data-asset-id],.gjs-am-item');
+  const element = target?.closest?.('[data-asset],[data-asset-id],.gjs-am-asset,.gjs-am-item');
   if (!element) {
     return;
   }
@@ -245,8 +249,15 @@ editor.AssetManager.on('open', () => {
   if (!container) {
     return;
   }
+  if (!lastSelectedComponent) {
+    lastSelectedComponent = editor.getSelected();
+  }
   container.removeEventListener('dblclick', handleDoubleClick);
   container.addEventListener('dblclick', handleDoubleClick);
+});
+
+editor.AssetManager.on('close', () => {
+  lastSelectedComponent = null;
 });
 
 saveBtn.addEventListener('click', async () => {

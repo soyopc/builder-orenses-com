@@ -104,7 +104,7 @@ async function loadSite() {
   }
 
   siteInfo.innerHTML = `
-    <p><strong>Slug:</strong> ${site.slug}</p>
+    <p><strong>Nombre web:</strong> ${site.slug}</p>
     <p><strong>URL:</strong> <a href="https://orenses.com/u/${site.slug}/" target="_blank">https://orenses.com/u/${site.slug}/</a></p>
   `;
 
@@ -198,7 +198,7 @@ if (createSiteBtn) {
       await loadSite();
     } catch (error) {
       if (createError) {
-        createError.textContent = 'No se pudo crear el sitio. Verifica el slug.';
+      createError.textContent = 'No se pudo crear el sitio, nombre ya existe. Verifica el nombre web.';
       }
     }
   });

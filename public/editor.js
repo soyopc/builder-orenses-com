@@ -324,6 +324,7 @@ publishBtn.addEventListener('click', async () => {
     publishBtn.textContent = 'Publicado';
   } catch (error) {
     publishBtn.textContent = 'Error';
+    alert(`Error al publicar: ${error.message}`);
   }
   setTimeout(() => (publishBtn.textContent = 'Publicar'), 1500);
 });

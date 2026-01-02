@@ -236,6 +236,30 @@ editor.on('asset:select', insertSelectedAsset);
 
 editor.AssetManager.on('open', () => {
   lastSelectedComponent = editor.getSelected();
+  const container = editor.AssetManager.getContainer();
+  if (!container) {
+    return;
+  }
+  container.addEventListener(
+    'dblclick',
+    (event) => {
+      const target = event.target;
+      const element = target?.closest?.('[data-asset],[data-asset-id],.gjs-am-item');
+      if (!element) {
+        return;
+      }
+      const src =
+        element.getAttribute('data-asset') ||
+        element.getAttribute('data-asset-src') ||
+        element.getAttribute('data-src') ||
+        element.querySelector?.('img')?.getAttribute?.('src');
+      if (!src) {
+        return;
+      }
+      insertSelectedAsset({ src });
+    },
+    { once: true }
+  );
 });
 
 saveBtn.addEventListener('click', async () => {

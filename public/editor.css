@@ -11,6 +11,8 @@ body, html {
   align-items: center;
   padding: 0 16px;
   gap: 12px;
+  position: relative;
+  z-index: 100;
 }
 
 #editor-toolbar button {
@@ -33,6 +35,8 @@ body, html {
 
 #gjs {
   height: calc(100% - 56px);
+  position: relative;
+  z-index: 1;
 }
 
 .save-banner {

@@ -226,6 +226,28 @@ document.addEventListener('DOMContentLoaded', () => {
   editorStatus.id = 'editor-status';
   document.body.appendChild(editorStatus);
 
+  const missing = [
+    !backBtn && 'back-btn',
+    !assetsLibraryBtn && 'assets-library-btn',
+    !sourceBtn && 'source-btn',
+    !sourceModal && 'source-modal',
+    !sourceTextarea && 'source-textarea',
+    !sourceSave && 'source-save',
+    !sourceClose && 'source-close',
+    !saveBtn && 'save-btn',
+    !publishBtn && 'publish-btn',
+    !saveBanner && 'save-banner'
+  ].filter(Boolean);
+
+  if (missing.length > 0) {
+    editorStatus.textContent = `Error UI: faltan elementos ${missing.join(', ')}`;
+    return;
+  }
+
+  window.addEventListener('error', (event) => {
+    editorStatus.textContent = `Error JS: ${event.message}`;
+  });
+
   const openSourceModal = () => {
     const html = editor.getHtml();
     const css = editor.getCss();

@@ -198,6 +198,7 @@ const backBtn = document.getElementById('back-btn');
 const assetsLibraryBtn = document.getElementById('assets-library-btn');
 const saveBtn = document.getElementById('save-btn');
 const publishBtn = document.getElementById('publish-btn');
+let lastSelectedComponent = null;
 
 backBtn.addEventListener('click', () => {
   window.location.href = '/';
@@ -207,27 +208,27 @@ assetsLibraryBtn.addEventListener('click', () => {
   editor.runCommand('open-assets');
 });
 
-editor.AssetManager.on('asset:select', (asset) => {
+const insertSelectedAsset = (asset) => {
   const src = asset.get('src') || asset.get('url');
   if (!src) {
     return;
   }
-  const selected = editor.getSelected();
+  const selected = lastSelectedComponent || editor.getSelected();
   if (selected && selected.is('image')) {
     selected.set('src', src);
     return;
   }
 
-  const target = editor.getSelected() || editor.getWrapper();
+  const target = selected || editor.getWrapper();
   editor.addComponents(`<img src="${src}" alt="" />`, { at: 0, target });
   editor.AssetManager.close();
-});
+};
+
+editor.AssetManager.on('asset:select', insertSelectedAsset);
+editor.on('asset:select', insertSelectedAsset);
 
 editor.AssetManager.on('open', () => {
-  const selected = editor.getSelected();
-  if (selected) {
-    editor.select(selected);
-  }
+  lastSelectedComponent = editor.getSelected();
 });
 
 saveBtn.addEventListener('click', async () => {

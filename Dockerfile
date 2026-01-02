@@ -12,4 +12,4 @@ EXPOSE 4007
 
 RUN chmod +x /app/scripts/entrypoint.sh
 
-CMD ["/app/scripts/entrypoint.sh"]
+ENTRYPOINT ["/bin/sh", "/app/scripts/entrypoint.sh"]

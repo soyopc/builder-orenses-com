@@ -14,6 +14,23 @@ if (!token) {
   window.location.href = '/';
 }
 
+const insertSelectedAsset = (asset) => {
+  const src = asset?.get?.('src') || asset?.get?.('url') || asset?.src || asset?.url;
+  if (!src) {
+    return;
+  }
+  const selected = lastSelectedComponent || editor.getSelected();
+  if (selected && selected.is('image')) {
+    selected.set('src', src);
+    editor.AssetManager.close();
+    return;
+  }
+
+  const target = selected || editor.getWrapper();
+  editor.addComponents(`<img src="${src}" alt="" />`, { at: 0, target });
+  editor.AssetManager.close();
+};
+
 const editor = grapesjs.init({
   container: '#gjs',
   fromElement: false,
@@ -25,6 +42,12 @@ const editor = grapesjs.init({
     uploadName: 'files',
     headers: {
       Authorization: `Bearer ${token}`
+    },
+    onSelect: (asset, complete) => {
+      insertSelectedAsset(asset);
+      if (typeof complete === 'function') {
+        complete();
+      }
     }
   },
   styleManager: {
@@ -207,22 +230,6 @@ backBtn.addEventListener('click', () => {
 assetsLibraryBtn.addEventListener('click', () => {
   editor.runCommand('open-assets');
 });
-
-const insertSelectedAsset = (asset) => {
-  const src = asset.get('src') || asset.get('url');
-  if (!src) {
-    return;
-  }
-  const selected = lastSelectedComponent || editor.getSelected();
-  if (selected && selected.is('image')) {
-    selected.set('src', src);
-    return;
-  }
-
-  const target = selected || editor.getWrapper();
-  editor.addComponents(`<img src="${src}" alt="" />`, { at: 0, target });
-  editor.AssetManager.close();
-};
 
 editor.AssetManager.on('asset:select', insertSelectedAsset);
 editor.on('asset:select', insertSelectedAsset);

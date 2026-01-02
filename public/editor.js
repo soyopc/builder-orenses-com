@@ -215,10 +215,19 @@ editor.AssetManager.on('asset:select', (asset) => {
   const selected = editor.getSelected();
   if (selected && selected.is('image')) {
     selected.set('src', src);
-  } else {
-    editor.addComponents(`<img src="${src}" alt="" />`);
+    return;
   }
+
+  const target = editor.getSelected() || editor.getWrapper();
+  editor.addComponents(`<img src="${src}" alt="" />`, { at: 0, target });
   editor.AssetManager.close();
+});
+
+editor.AssetManager.on('open', () => {
+  const selected = editor.getSelected();
+  if (selected) {
+    editor.select(selected);
+  }
 });
 
 saveBtn.addEventListener('click', async () => {

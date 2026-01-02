@@ -20,6 +20,13 @@ const editor = grapesjs.init({
   height: '100%',
   width: 'auto',
   storageManager: false,
+  assetManager: {
+    upload: '/api/assets',
+    uploadName: 'files',
+    headers: {
+      Authorization: `Bearer ${token}`
+    }
+  },
   styleManager: {
     sectors: [
       {

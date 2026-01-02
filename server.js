@@ -3,6 +3,7 @@ import rateLimit from 'express-rate-limit';
 import morgan from 'morgan';
 import jwt from 'jsonwebtoken';
 import dotenv from 'dotenv';
+import multer from 'multer';
 
 import { authRequired } from './middleware/auth.js';
 import {
@@ -13,7 +14,7 @@ import {
   renameSite,
   updateSiteTemplate
 } from './db/index.js';
-import { listTemplates, readFile, writeFile, copyPrefix, movePrefix, deletePrefix } from './lib/gcs.js';
+import { listTemplates, readFile, writeFile, writeBuffer, copyPrefix, movePrefix, deletePrefix } from './lib/gcs.js';
 
 dotenv.config();
 
@@ -21,11 +22,17 @@ const app = express();
 const PORT = process.env.PORT || 4007;
 const jwtSecret = process.env.BUILDER_JWT_SECRET || process.env.JWT_SECRET;
 const strapiUrl = process.env.STRAPI_URL || 'https://cms.orenses.com/admin/login';
+const assetBaseUrl = process.env.ASSET_BASE_URL || 'https://orenses.com';
 
 app.use(express.json({ limit: '10mb' }));
 app.use(morgan('combined'));
 app.use(rateLimit({ windowMs: 60 * 1000, max: 120 }));
 app.use(express.static('public'));
+
+const upload = multer({
+  storage: multer.memoryStorage(),
+  limits: { fileSize: 25 * 1024 * 1024 }
+});
 
 app.post('/api/auth/login', async (req, res) => {
   const { email, password } = req.body || {};
@@ -183,6 +190,33 @@ app.patch('/api/site/template', async (req, res) => {
     return res.json({ site: updated });
   } catch (error) {
     return res.status(500).json({ error: 'template_update_failed' });
+  }
+});
+
+app.post('/api/assets', upload.array('files'), async (req, res) => {
+  if (!req.files || req.files.length === 0) {
+    return res.status(400).json({ error: 'missing_files' });
+  }
+
+  try {
+    const site = await getSiteByAdmin(req.user.sub);
+    if (!site) {
+      return res.status(404).json({ error: 'site_not_found' });
+    }
+
+    const prefix = site.gcs_prefix || `u/${site.slug}`;
+    const uploads = await Promise.all(
+      req.files.map(async (file) => {
+        const safeName = file.originalname.replace(/[^\w.\-]+/g, '-');
+        const objectPath = `${prefix}/assets/${Date.now()}-${safeName}`;
+        await writeBuffer(objectPath, file.buffer, file.mimetype || 'application/octet-stream');
+        return `${assetBaseUrl}/u/${site.slug}/assets/${objectPath.split('/assets/')[1]}`;
+      })
+    );
+
+    return res.json({ data: uploads });
+  } catch (error) {
+    return res.status(500).json({ error: 'asset_upload_failed' });
   }
 });
 

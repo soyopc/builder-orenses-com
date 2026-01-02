@@ -223,6 +223,32 @@ assetsLibraryBtn.addEventListener('click', () => {
 
 editor.on('asset:select', insertSelectedAsset);
 
+function handleDoubleClick(event) {
+  const target = event.target;
+  const element = target?.closest?.('[data-asset],[data-asset-id],.gjs-am-item');
+  if (!element) {
+    return;
+  }
+  const src =
+    element.getAttribute('data-asset') ||
+    element.getAttribute('data-asset-src') ||
+    element.getAttribute('data-src') ||
+    element.querySelector?.('img')?.getAttribute?.('src');
+  if (!src) {
+    return;
+  }
+  insertSelectedAsset(src);
+}
+
+editor.AssetManager.on('open', () => {
+  const container = editor.AssetManager.getContainer();
+  if (!container) {
+    return;
+  }
+  container.removeEventListener('dblclick', handleDoubleClick);
+  container.addEventListener('dblclick', handleDoubleClick);
+});
+
 saveBtn.addEventListener('click', async () => {
   saveBtn.textContent = 'Guardando...';
   try {

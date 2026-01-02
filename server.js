@@ -79,6 +79,13 @@ app.post('/api/auth/login', async (req, res) => {
 
 app.use('/api', authRequired);
 
+app.use((err, _req, res, next) => {
+  if (err instanceof multer.MulterError) {
+    return res.status(400).json({ error: err.code || 'upload_error' });
+  }
+  return next(err);
+});
+
 app.get('/api/templates', async (_req, res) => {
   try {
     const templates = await listTemplates();
@@ -216,6 +223,7 @@ app.post('/api/assets', upload.array('files'), async (req, res) => {
 
     return res.json({ data: uploads });
   } catch (error) {
+    console.error('asset_upload_failed', error);
     return res.status(500).json({ error: 'asset_upload_failed' });
   }
 });
@@ -278,6 +286,7 @@ app.post('/api/site/publish', async (req, res) => {
 });
 
 app.use((err, _req, res, _next) => {
+  console.error('server_error', err);
   return res.status(500).json({ error: 'server_error' });
 });
 

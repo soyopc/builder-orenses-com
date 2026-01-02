@@ -14,7 +14,16 @@ import {
   renameSite,
   updateSiteTemplate
 } from './db/index.js';
-import { listTemplates, readFile, writeFile, writeBuffer, copyPrefix, movePrefix, deletePrefix } from './lib/gcs.js';
+import {
+  listTemplates,
+  readFile,
+  writeFile,
+  writeBuffer,
+  copyPrefix,
+  movePrefix,
+  deletePrefix,
+  listFiles
+} from './lib/gcs.js';
 
 dotenv.config();
 
@@ -218,6 +227,24 @@ app.post('/api/assets', upload.any(), async (req, res) => {
   } catch (error) {
     console.error('asset_upload_failed', error);
     return res.status(500).json({ error: 'asset_upload_failed' });
+  }
+});
+
+app.get('/api/assets', async (req, res) => {
+  try {
+    const site = await getSiteByAdmin(req.user.sub);
+    if (!site) {
+      return res.status(404).json({ error: 'site_not_found' });
+    }
+
+    const prefix = site.gcs_prefix || `u/${site.slug}`;
+    const assetsPrefix = `${prefix}/assets/`;
+    const files = await listFiles(assetsPrefix);
+    const assets = files.map((name) => `${assetBaseUrl}/u/${site.slug}/assets/${name.split('/assets/')[1]}`);
+    return res.json({ assets });
+  } catch (error) {
+    console.error('asset_list_failed', error);
+    return res.status(500).json({ error: 'asset_list_failed' });
   }
 });
 

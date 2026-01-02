@@ -177,9 +177,22 @@ async function publishSite() {
   alert(`Sitio publicado en ${result.url}`);
 }
 
+async function loadAssets() {
+  try {
+    const { assets } = await apiRequest('/assets');
+    if (Array.isArray(assets)) {
+      editor.AssetManager.add(assets);
+    }
+  } catch (error) {
+    // ignore asset list load errors
+  }
+}
+
 loadContent().catch(() => {
   alert('No se pudo cargar el contenido.');
 });
+
+loadAssets();
 
 const backBtn = document.getElementById('back-btn');
 const assetsBtn = document.getElementById('assets-btn');

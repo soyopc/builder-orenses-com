@@ -312,7 +312,7 @@ document.addEventListener('DOMContentLoaded', () => {
     insertSelectedAsset(src);
   }
 
-  editor.AssetManager.on('open', () => {
+  editor.on('asset:open', () => {
     const container = editor.AssetManager.getContainer();
     if (!container) {
       return;
@@ -324,7 +324,7 @@ document.addEventListener('DOMContentLoaded', () => {
     container.addEventListener('dblclick', handleDoubleClick);
   });
 
-  editor.AssetManager.on('close', () => {
+  editor.on('asset:close', () => {
     lastSelectedComponent = null;
   });
 

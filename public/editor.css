@@ -22,6 +22,11 @@ body, html {
   cursor: pointer;
 }
 
+#editor-toolbar button.secondary {
+  background: #0f172a;
+  border: 1px solid #1f2937;
+}
+
 #editor-toolbar .spacer {
   flex: 1;
 }

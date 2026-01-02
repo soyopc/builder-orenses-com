@@ -182,11 +182,16 @@ loadContent().catch(() => {
 });
 
 const backBtn = document.getElementById('back-btn');
+const assetsBtn = document.getElementById('assets-btn');
 const saveBtn = document.getElementById('save-btn');
 const publishBtn = document.getElementById('publish-btn');
 
 backBtn.addEventListener('click', () => {
   window.location.href = '/';
+});
+
+assetsBtn.addEventListener('click', () => {
+  editor.runCommand('open-assets');
 });
 
 saveBtn.addEventListener('click', async () => {

@@ -308,6 +308,7 @@ saveBtn.addEventListener('click', async () => {
     saveBtn.textContent = 'Guardado';
   } catch (error) {
     saveBtn.textContent = 'Error';
+    alert(`Error al guardar: ${error.message}`);
   }
   setTimeout(() => (saveBtn.textContent = 'Guardar'), 1500);
 });

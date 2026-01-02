@@ -62,4 +62,18 @@ export function registerMediaBlocks(editor) {
       </section>
     `
   });
+
+  blockManager.add('media-upload', {
+    label: 'Subir imagen',
+    category: 'Media',
+    content: {
+      type: 'image',
+      attributes: {
+        src: 'https://via.placeholder.com/900x520?text=Sube+una+imagen'
+      }
+    },
+    activate: true,
+    select: true,
+    command: 'open-assets'
+  });
 }

@@ -221,6 +221,9 @@ const sourceClose = document.getElementById('source-close');
 const saveBtn = document.getElementById('save-btn');
 const publishBtn = document.getElementById('publish-btn');
 const saveBanner = document.getElementById('save-banner');
+const editorStatus = document.createElement('div');
+editorStatus.id = 'editor-status';
+document.body.appendChild(editorStatus);
 
 const openSourceModal = () => {
   const html = editor.getHtml();
@@ -309,9 +312,11 @@ saveBtn.addEventListener('click', async () => {
     saveBtn.textContent = 'Guardado';
     saveBanner.classList.remove('hidden');
     setTimeout(() => saveBanner.classList.add('hidden'), 2000);
+    editorStatus.textContent = 'Grabado !!';
   } catch (error) {
     saveBtn.textContent = 'Error';
     alert(`Error al guardar: ${error.message}`);
+    editorStatus.textContent = `Error al guardar: ${error.message}`;
   }
   setTimeout(() => (saveBtn.textContent = 'Guardar'), 1500);
 });
@@ -320,11 +325,13 @@ publishBtn.addEventListener('click', async () => {
   publishBtn.textContent = 'Publicando...';
   try {
     await saveContent();
-    await publishSite();
+    const { url } = await publishSite();
     publishBtn.textContent = 'Publicado';
+    editorStatus.textContent = `Publicado: ${url}`;
   } catch (error) {
     publishBtn.textContent = 'Error';
     alert(`Error al publicar: ${error.message}`);
+    editorStatus.textContent = `Error al publicar: ${error.message}`;
   }
   setTimeout(() => (publishBtn.textContent = 'Publicar'), 1500);
 });

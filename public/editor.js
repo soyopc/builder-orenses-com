@@ -17,26 +17,15 @@ if (!token) {
 let lastSelectedComponent = null;
 
 const insertSelectedAsset = (asset) => {
-  console.log('=== insertSelectedAsset llamado ===');
-  console.log('asset recibido:', asset);
   const src = typeof asset === 'string' ? asset : asset?.get?.('src') || asset?.src;
-  console.log('src extraído:', src);
   if (!src) {
-    console.log('❌ No hay src, saliendo');
     return;
   }
   const selected = lastSelectedComponent || editor.getSelected();
-  console.log('lastSelectedComponent:', lastSelectedComponent);
-  console.log('editor.getSelected():', editor.getSelected());
-  console.log('selected final:', selected);
-  console.log('selected es imagen?', selected?.is?.('image'));
   if (selected && selected.is('image')) {
-    console.log('✅ Reemplazando imagen existente');
     selected.set('src', src);
   } else {
     const target = selected || editor.getWrapper();
-    console.log('🆕 Insertando nueva imagen en target:', target);
-    console.log('target type:', target?.get?.('type'));
     editor.addComponents(`<img src="${src}" alt="" />`, { target });
   }
   editor.AssetManager.close();
@@ -239,13 +228,9 @@ assetsLibraryBtn.addEventListener('click', () => {
 editor.on('asset:select', insertSelectedAsset);
 
 function handleDoubleClick(event) {
-  console.log('=== DOBLE CLIC detectado ===');
-  console.log('event.target:', event.target);
   const target = event.target;
   const element = target?.closest?.('[data-asset],[data-asset-id],.gjs-am-asset,.gjs-am-item');
-  console.log('element encontrado:', element);
   if (!element) {
-    console.log('❌ No se encontró elemento');
     return;
   }
   const src =
@@ -253,12 +238,9 @@ function handleDoubleClick(event) {
     element.getAttribute('data-asset-src') ||
     element.getAttribute('data-src') ||
     element.querySelector?.('img')?.getAttribute?.('src');
-  console.log('src del elemento:', src);
   if (!src) {
-    console.log('❌ No se pudo extraer src');
     return;
   }
-  console.log('✅ Llamando a insertSelectedAsset con:', src);
   insertSelectedAsset(src);
 }
 

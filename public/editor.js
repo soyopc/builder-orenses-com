@@ -221,6 +221,13 @@ const sourceClose = document.getElementById('source-close');
 const saveBtn = document.getElementById('save-btn');
 const publishBtn = document.getElementById('publish-btn');
 
+const openSourceModal = () => {
+  const html = editor.getHtml();
+  const css = editor.getCss();
+  sourceTextarea.value = `<!-- HTML -->\n${html}\n\n<!-- CSS -->\n${css}\n`;
+  sourceModal.classList.remove('hidden');
+};
+
 backBtn.addEventListener('click', () => {
   window.location.href = '/';
 });
@@ -230,12 +237,7 @@ assetsLibraryBtn.addEventListener('click', () => {
   editor.runCommand('open-assets');
 });
 
-sourceBtn.addEventListener('click', () => {
-  const html = editor.getHtml();
-  const css = editor.getCss();
-  sourceTextarea.value = `<!-- HTML -->\n${html}\n\n<!-- CSS -->\n${css}\n`;
-  sourceModal.classList.remove('hidden');
-});
+sourceBtn.addEventListener('click', openSourceModal);
 
 sourceClose.addEventListener('click', () => {
   sourceModal.classList.add('hidden');
@@ -252,6 +254,19 @@ sourceSave.addEventListener('click', () => {
 });
 
 editor.on('asset:select', insertSelectedAsset);
+
+editor.Commands.add('open-source', {
+  run() {
+    openSourceModal();
+  }
+});
+
+editor.Panels.addButton('options', {
+  id: 'edit-source',
+  label: '</>',
+  command: 'open-source',
+  attributes: { title: 'Editar código' }
+});
 
 function handleDoubleClick(event) {
   const target = event.target;

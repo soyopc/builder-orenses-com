@@ -15,19 +15,16 @@ if (!token) {
 }
 
 const insertSelectedAsset = (asset) => {
-  const src = asset?.get?.('src') || asset?.get?.('url') || asset?.src || asset?.url;
+  const src = typeof asset === 'string' ? asset : asset?.get?.('src') || asset?.src;
   if (!src) {
     return;
   }
-  const selected = lastSelectedComponent || editor.getSelected();
+  const selected = editor.getSelected();
   if (selected && selected.is('image')) {
     selected.set('src', src);
-    editor.AssetManager.close();
-    return;
+  } else {
+    editor.addComponents(`<img src="${src}" alt="" />`);
   }
-
-  const target = selected || editor.getWrapper();
-  editor.addComponents(`<img src="${src}" alt="" />`, { at: 0, target });
   editor.AssetManager.close();
 };
 
@@ -42,12 +39,6 @@ const editor = grapesjs.init({
     uploadName: 'files',
     headers: {
       Authorization: `Bearer ${token}`
-    },
-    onSelect: (asset, complete) => {
-      insertSelectedAsset(asset);
-      if (typeof complete === 'function') {
-        complete();
-      }
     }
   },
   styleManager: {
@@ -221,7 +212,6 @@ const backBtn = document.getElementById('back-btn');
 const assetsLibraryBtn = document.getElementById('assets-library-btn');
 const saveBtn = document.getElementById('save-btn');
 const publishBtn = document.getElementById('publish-btn');
-let lastSelectedComponent = null;
 
 backBtn.addEventListener('click', () => {
   window.location.href = '/';
@@ -231,36 +221,7 @@ assetsLibraryBtn.addEventListener('click', () => {
   editor.runCommand('open-assets');
 });
 
-editor.AssetManager.on('asset:select', insertSelectedAsset);
 editor.on('asset:select', insertSelectedAsset);
-
-editor.AssetManager.on('open', () => {
-  lastSelectedComponent = editor.getSelected();
-  const container = editor.AssetManager.getContainer();
-  if (!container) {
-    return;
-  }
-  container.addEventListener(
-    'dblclick',
-    (event) => {
-      const target = event.target;
-      const element = target?.closest?.('[data-asset],[data-asset-id],.gjs-am-item');
-      if (!element) {
-        return;
-      }
-      const src =
-        element.getAttribute('data-asset') ||
-        element.getAttribute('data-asset-src') ||
-        element.getAttribute('data-src') ||
-        element.querySelector?.('img')?.getAttribute?.('src');
-      if (!src) {
-        return;
-      }
-      insertSelectedAsset({ src });
-    },
-    { once: true }
-  );
-});
 
 saveBtn.addEventListener('click', async () => {
   saveBtn.textContent = 'Guardando...';

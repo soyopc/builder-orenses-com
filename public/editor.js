@@ -192,6 +192,7 @@ async function saveContent() {
 async function publishSite() {
   const result = await apiRequest('/site/publish', { method: 'POST' });
   alert(`Sitio publicado en ${result.url}`);
+  return result;
 }
 
 async function loadAssets() {

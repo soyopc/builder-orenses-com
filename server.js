@@ -193,7 +193,7 @@ app.patch('/api/site/template', async (req, res) => {
   }
 });
 
-app.post('/api/assets', upload.array('files'), async (req, res) => {
+app.post('/api/assets', upload.any(), async (req, res) => {
   if (!req.files || req.files.length === 0) {
     return res.status(400).json({ error: 'missing_files' });
   }

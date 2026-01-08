@@ -1,0 +1,398 @@
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
+    <meta http-equiv="Pragma" content="no-cache" />
+    <meta http-equiv="Expires" content="0" />
+    <title>Orenses Builder</title>
+
+    <!-- Mantengo tu CSS global -->
+    <link rel="stylesheet" href="/style.css?v=20250105" />
+
+    <!-- CSS extra solo para la nueva portada (clases home-*) -->
+    <style>
+      :root{
+        --home-max: 1100px;
+        --home-radius: 16px;
+        --home-shadow: 0 10px 30px rgba(0,0,0,.15);
+      }
+
+      /* Layout base */
+      .home-wrap{ width: 100%; }
+      .home-section{ width: 100%; }
+      .home-inner{
+        width: min(var(--home-max), calc(100% - 32px));
+        margin: 0 auto;
+      }
+
+      /* HERO VIDEO */
+      .home-hero{
+        position: relative;
+        min-height: 72vh;
+        display: grid;
+        align-items: center;
+        overflow: hidden;
+        background: #0b0f14;
+      }
+      .home-hero video{
+        position: absolute;
+        inset: 0;
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        opacity: .95;
+      }
+      .home-hero .home-hero-overlay{
+        position: absolute;
+        inset: 0;
+        background: linear-gradient(90deg, rgba(0,0,0,.70) 0%, rgba(0,0,0,.35) 55%, rgba(0,0,0,.10) 100%);
+      }
+      .home-hero .home-hero-content{
+        position: relative;
+        padding: 64px 0;
+        color: #fff;
+      }
+      .home-hero h1{
+        margin: 0 0 14px 0;
+        font-size: clamp(28px, 4vw, 46px);
+        line-height: 1.08;
+        max-width: 18ch;
+      }
+      .home-hero p{
+        margin: 0 0 24px 0;
+        font-size: clamp(15px, 1.6vw, 18px);
+        line-height: 1.45;
+        max-width: 60ch;
+        opacity: .92;
+      }
+      .home-cta-row{
+        display: flex;
+        gap: 12px;
+        flex-wrap: wrap;
+        align-items: center;
+      }
+      .home-btn{
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        border: 0;
+        border-radius: 14px;
+        padding: 14px 18px;
+        font-weight: 700;
+        cursor: pointer;
+        text-decoration: none;
+        transition: transform .08s ease, opacity .15s ease;
+        user-select: none;
+      }
+      .home-btn:active{ transform: translateY(1px); }
+      .home-btn-primary{
+        background: #6d4dff;
+        color: #fff;
+        box-shadow: var(--home-shadow);
+      }
+      .home-btn-secondary{
+        background: rgba(255,255,255,.14);
+        color: #fff;
+        border: 1px solid rgba(255,255,255,.22);
+      }
+
+      /* BANNER TESTIMONIO */
+      .home-banner{
+        padding: 56px 0;
+        background: #ffffff;
+      }
+      .home-banner-grid{
+        display: grid;
+        gap: 26px;
+        grid-template-columns: 1fr;
+        align-items: center;
+      }
+      .home-banner-img{
+        width: 100%;
+        border-radius: var(--home-radius);
+        box-shadow: var(--home-shadow);
+        overflow: hidden;
+        background: #eef2f7;
+      }
+      .home-banner-img img{
+        width: 100%;
+        height: auto;
+        display: block;
+      }
+      .home-quote{
+        position: relative;
+        padding: 10px 0 0 0;
+      }
+      .home-quote-mark{
+        display: inline-block;
+        font-size: 46px;
+        line-height: 1;
+        font-weight: 900;
+        color: #6d4dff;
+        margin-bottom: 6px;
+      }
+      .home-quote h2{
+        margin: 0 0 10px 0;
+        font-size: clamp(22px, 2.6vw, 34px);
+        line-height: 1.12;
+        letter-spacing: -0.2px;
+      }
+      .home-quote .home-quote-meta{
+        margin-top: 14px;
+        opacity: .72;
+        font-size: 14px;
+      }
+
+      /* LOGIN + VENTAJAS */
+      .home-login{
+        padding: 56px 0 72px 0;
+        background: #f7f8fb;
+      }
+      .home-login-grid{
+        display: grid;
+        gap: 18px;
+        grid-template-columns: 1fr;
+        align-items: start;
+      }
+      .home-advantages{
+        border-radius: var(--home-radius);
+        background: #fff;
+        box-shadow: var(--home-shadow);
+        padding: 22px;
+      }
+      .home-advantages h2{
+        margin: 0 0 14px 0;
+        font-size: 28px;
+        line-height: 1.15;
+      }
+      .home-advantages p{
+        margin: 0 0 18px 0;
+        opacity: .78;
+      }
+      .home-adv-grid{
+        display: grid;
+        grid-template-columns: 1fr;
+        gap: 12px;
+      }
+      .home-adv{
+        display: grid;
+        grid-template-columns: 54px 1fr;
+        gap: 12px;
+        padding: 12px;
+        border-radius: 14px;
+        border: 1px solid #eef0f6;
+      }
+      .home-adv .home-adv-ico{
+        width: 54px;
+        height: 54px;
+        border-radius: 14px;
+        background: #d7ff3b;
+        display: grid;
+        place-items: center;
+        font-weight: 900;
+      }
+      .home-adv h3{ margin: 0; font-size: 16px; }
+      .home-adv small{ display:block; margin-top: 4px; opacity: .76; line-height: 1.35; }
+
+      /* Tu login-section se mantiene (id + form + error) pero lo estilizo aparte */
+      #login-section{
+        border-radius: var(--home-radius);
+        background: #fff;
+        box-shadow: var(--home-shadow);
+        padding: 22px;
+      }
+      #login-section h1{
+        margin: 0 0 14px 0;
+        font-size: 22px;
+      }
+      #login-section form{
+        display: grid;
+        gap: 12px;
+      }
+      #login-section label{
+        display: grid;
+        gap: 6px;
+        font-weight: 600;
+      }
+      #login-section input{
+        padding: 12px 12px;
+        border-radius: 12px;
+        border: 1px solid #e5e7ef;
+        outline: none;
+      }
+      #login-section input:focus{
+        border-color: #6d4dff;
+        box-shadow: 0 0 0 4px rgba(109,77,255,.12);
+      }
+      #login-section button{
+        border: 0;
+        border-radius: 14px;
+        padding: 14px 16px;
+        font-weight: 800;
+        cursor: pointer;
+        background: #111827;
+        color: #fff;
+      }
+      #login-error{ margin: 0; }
+
+      /* Responsive */
+      @media (min-width: 920px){
+        .home-banner-grid{
+          grid-template-columns: 1fr 1.1fr;
+        }
+        .home-login-grid{
+          grid-template-columns: 1.1fr .9fr;
+          gap: 22px;
+        }
+        .home-adv-grid{
+          grid-template-columns: 1fr 1fr;
+        }
+      }
+
+      /* Scroll suave cuando presionas "inicia ahora" */
+      html{ scroll-behavior: smooth; }
+    </style>
+  </head>
+
+  <body>
+    <div class="home-wrap" id="home-sections">
+
+      <!-- 1) HEADER / HERO con video de fondo -->
+      <section class="home-section home-hero" aria-label="Portada">
+        <video
+          src="/assets/home-mov.mp4"
+          autoplay
+          muted
+          loop
+          playsinline
+          preload="metadata"
+        ></video>
+        <div class="home-hero-overlay"></div>
+
+        <div class="home-inner home-hero-content">
+          <h1>
+            Crea tu identidad digital hoy mismo.<br />
+            Es más fácil de lo que imaginas.
+          </h1>
+          <p>
+            Deja que tus clientes te encuentren por US$ 3.99/mes, con el creador web de Orenses.com
+          </p>
+
+          <div class="home-cta-row">
+            <a class="home-btn home-btn-primary" href="#login">
+              &gt; inicia ahora &gt;
+            </a>
+            <a class="home-btn home-btn-secondary" href="#banner">
+              Ver cómo funciona
+            </a>
+          </div>
+        </div>
+      </section>
+
+      <!-- 2) Sección tipo "inicio-banner" -->
+      <section id="banner" class="home-section home-banner" aria-label="Testimonio">
+        <div class="home-inner">
+          <div class="home-banner-grid">
+            <div class="home-banner-img">
+              <img src="/assets/home-banner.jpg" alt="Creador de páginas Orenses.com" />
+            </div>
+
+            <div class="home-quote">
+              <div class="home-quote-mark">“</div>
+              <h2>
+                Convertir mi proyecto en realidad con el creador de páginas web de Orenses.com
+                fue muy sencillo, gracias a su facilidad de uso y plantillas listas para usar
+              </h2>
+              <div class="home-quote-meta">
+                Testimonio • Usuarios Orenses.com
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- 3) Sección ventajas + logeo (mismo page) -->
+      <section id="login" class="home-section home-login" aria-label="Acceso">
+        <div class="home-inner">
+          <div class="home-login-grid">
+
+            <!-- Izquierda: ventajas (tipo inicio-ventajas) -->
+            <div class="home-advantages">
+              <h2>Creá una web a tu manera</h2>
+              <p>Personalizá tu web con herramientas intuitivas y fáciles de usar.</p>
+
+              <div class="home-adv-grid">
+                <div class="home-adv">
+                  <div class="home-adv-ico">+</div>
+                  <div>
+                    <h3>Arrastrá y soltá</h3>
+                    <small>Reubicá contenido arrastrándolo y soltándolo en su lugar.</small>
+                  </div>
+                </div>
+
+                <div class="home-adv">
+                  <div class="home-adv-ico">#</div>
+                  <div>
+                    <h3>Usá Smart Grid</h3>
+                    <small>Mantené todo alineado mientras ajustás los detalles.</small>
+                  </div>
+                </div>
+
+                <div class="home-adv">
+                  <div class="home-adv-ico">Aa</div>
+                  <div>
+                    <h3>Cambiá colores y fuentes</h3>
+                    <small>Encontrá lo que realmente interprete la esencia de tu marca.</small>
+                  </div>
+                </div>
+
+                <div class="home-adv">
+                  <div class="home-adv-ico">▦</div>
+                  <div>
+                    <h3>Personalizá elementos</h3>
+                    <small>Adaptá cada bloque a la web que tenés en mente.</small>
+                  </div>
+                </div>
+
+                <div class="home-adv">
+                  <div class="home-adv-ico">📱</div>
+                  <div>
+                    <h3>Escritorio y móvil</h3>
+                    <small>Creá, editá y publicá desde el dispositivo que quieras.</small>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Derecha: tu logeo (mantengo IDs para app.js) -->
+            <section id="login-section" class="card">
+              <h1>Acceso Builder</h1>
+              <form id="login-form">
+                <label>
+                  Email
+                  <input type="email" name="email" required />
+                </label>
+                <label>
+                  Contraseña
+                  <input type="password" name="password" required />
+                </label>
+
+                <!-- Cambié texto del botón como pediste -->
+                <button type="submit">&lt; acceder a builder &gt;</button>
+
+                <p id="login-error" class="error"></p>
+              </form>
+            </section>
+
+          </div>
+        </div>
+      </section>
+
+      <!-- Tu sección de sitio NO la toco, solo la dejo tal cual -->
+    </div>
+
+    <script src="/app.js?v=20250105"></script>
+  </body>
+</html>

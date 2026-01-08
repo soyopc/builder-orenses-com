@@ -1,0 +1,492 @@
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  font-family: "Inter", system-ui, sans-serif;
+}
+
+body {
+  background: #f5f6fb;
+  color: #0f172a;
+}
+
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 24px;
+}
+
+.hero {
+  position: relative;
+  min-height: 80vh;
+  display: flex;
+  align-items: center;
+  overflow: hidden;
+  color: #fff;
+}
+
+.hero-video {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  z-index: 0;
+}
+
+.hero-overlay {
+  position: absolute;
+  inset: 0;
+  background: rgba(15, 23, 42, 0.7);
+  z-index: 1;
+}
+
+.hero-content {
+  position: relative;
+  z-index: 2;
+  max-width: 640px;
+  padding: 120px 10%;
+}
+
+.hero-content h1 {
+  font-size: clamp(2.5rem, 4vw, 3.5rem);
+  line-height: 1.1;
+  margin-bottom: 24px;
+}
+
+.primary-btn {
+  display: inline-block;
+  padding: 14px 28px;
+  border-radius: 999px;
+  background: #b8ff2d;
+  color: #0f172a;
+  font-weight: 700;
+  text-decoration: none;
+  font-size: 1rem;
+  border: none;
+  cursor: pointer;
+}
+
+.banner {
+  background: #fff;
+  padding: 80px 0;
+}
+
+.banner-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  align-items: center;
+  gap: 40px;
+}
+
+.banner-image img {
+  width: 100%;
+  border-radius: 24px;
+  object-fit: cover;
+}
+
+.banner-text p {
+  font-size: clamp(1.4rem, 2.4vw, 2.2rem);
+  font-weight: 600;
+}
+
+.login-section {
+  padding: 80px 0;
+  background: #f8fafc;
+}
+
+.login-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 48px;
+  align-items: start;
+}
+
+.login-benefits h2 {
+  font-size: clamp(2rem, 3vw, 2.8rem);
+  margin-bottom: 16px;
+}
+
+.login-benefits p {
+  margin-bottom: 24px;
+  color: #475569;
+}
+
+.benefits-grid {
+  list-style: none;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: 24px;
+}
+
+.benefits-grid li {
+  background: #fff;
+  padding: 20px;
+  border-radius: 16px;
+  box-shadow: 0 12px 24px rgba(15, 23, 42, 0.08);
+}
+
+.benefit-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 48px;
+  height: 48px;
+  border-radius: 16px;
+  background: #b8ff2d;
+  font-weight: 700;
+  margin-bottom: 12px;
+}
+
+.login-card {
+  background: #fff;
+  padding: 32px;
+  border-radius: 20px;
+  box-shadow: 0 18px 30px rgba(15, 23, 42, 0.12);
+}
+
+.login-card h2 {
+  margin-bottom: 16px;
+}
+
+label {
+  display: block;
+  margin-bottom: 12px;
+  font-weight: 600;
+}
+
+input, select {
+  width: 100%;
+  margin-top: 6px;
+  padding: 12px 14px;
+  border: 1px solid #d4d7e1;
+  border-radius: 10px;
+}
+
+button {
+  padding: 10px 16px;
+  background: #111827;
+  border: none;
+  color: white;
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: 600;
+}
+
+button.ghost {
+  background: transparent;
+  color: #111827;
+  border: 1px solid #111827;
+}
+
+.actions {
+  margin-top: 16px;
+  display: flex;
+  gap: 12px;
+}
+
+.hidden {
+  display: none;
+}
+
+.error {
+  margin-top: 8px;
+  color: #dc2626;
+}
+
+.site-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.dashboard {
+  position: relative;
+  min-height: 100vh;
+  padding: 80px 0;
+  background: url("/assets/home-login.avif") center/cover no-repeat;
+}
+
+.dashboard-overlay {
+  position: absolute;
+  inset: 0;
+  background: rgba(15, 23, 42, 0.5);
+}
+
+.dashboard-grid {
+  position: relative;
+  z-index: 1;
+  display: grid;
+  gap: 32px;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  align-items: center;
+}
+
+.dashboard-left {
+  color: #fff;
+  margin-top: 150px;
+}
+
+.dashboard-welcome {
+  font-size: clamp(1.8rem, 3vw, 2.8rem);
+  font-weight: 700;
+}
+
+.dashboard-right {
+  background: rgba(255, 255, 255, 0.7);
+  margin-top: 150px;
+  padding: 20px;
+  border-radius: 16px;
+}
+
+.template-warning {
+  margin-top: 8px;
+  font-size: 12px;
+  color: #dc2626;
+}
+
+
+/* =====================================================
+   ORENSES HOME UI (solo secciones home-*)
+   Pegar al FINAL del style.css
+===================================================== */
+:root{
+  --home-max: 1100px;
+  --home-radius: 16px;
+  --home-shadow: 0 10px 30px rgba(0,0,0,.15);
+}
+
+/* Scroll suave para el botón "inicia ahora" -> #login */
+html{ scroll-behavior: smooth; }
+
+.home-wrap{ width:100%; }
+.home-section{ width:100%; }
+.home-inner{
+  width: min(var(--home-max), calc(100% - 32px));
+  margin: 0 auto;
+}
+
+/* HERO VIDEO */
+.home-hero{
+  position: relative;
+  min-height: 72vh;
+  display: grid;
+  align-items: center;
+  overflow: hidden;
+  background: #0b0f14;
+}
+.home-hero video{
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  opacity: .95;
+}
+.home-hero .home-hero-overlay{
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(90deg, rgba(0,0,0,.70) 0%, rgba(0,0,0,.35) 55%, rgba(0,0,0,.10) 100%);
+}
+.home-hero .home-hero-content{
+  position: relative;
+  padding: 64px 0;
+  color: #fff;
+}
+.home-hero h1{
+  margin: 0 0 14px 0;
+  font-size: clamp(28px, 4vw, 46px);
+  line-height: 1.08;
+  max-width: 18ch;
+}
+.home-hero p{
+  margin: 0 0 24px 0;
+  font-size: clamp(15px, 1.6vw, 18px);
+  line-height: 1.45;
+  max-width: 60ch;
+  opacity: .92;
+}
+
+/* Botones del hero (no afecta tus botones globales) */
+.home-cta-row{
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+  align-items: center;
+}
+.home-btn{
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border: 0;
+  border-radius: 14px;
+  padding: 14px 18px;
+  font-weight: 800;
+  cursor: pointer;
+  text-decoration: none;
+  transition: transform .08s ease, opacity .15s ease;
+  user-select: none;
+}
+.home-btn:active{ transform: translateY(1px); }
+.home-btn-primary{
+  background: #111827;
+  color: #fff;
+  box-shadow: var(--home-shadow);
+}
+.home-btn-secondary{
+  background: #111827;
+  color: #fff;
+  border: 1px solid #111827;
+}
+
+/* BANNER TESTIMONIO */
+.home-banner{
+  padding: 56px 0;
+  background: #ffffff;
+}
+.home-banner-grid{
+  display: grid;
+  gap: 26px;
+  grid-template-columns: 1fr;
+  align-items: center;
+}
+.home-banner-img{
+  width: 100%;
+  border-radius: var(--home-radius);
+  box-shadow: var(--home-shadow);
+  overflow: hidden;
+  background: #eef2f7;
+}
+.home-banner-img img{
+  width: 100%;
+  height: auto;
+  display: block;
+}
+.home-quote{
+  position: relative;
+  padding: 10px 0 0 0;
+}
+.home-quote-mark{
+  display: inline-block;
+  font-size: 46px;
+  line-height: 1;
+  font-weight: 900;
+  color: #6d4dff;
+  margin-bottom: 6px;
+}
+.home-quote h2{
+  margin: 0 0 10px 0;
+  font-size: clamp(22px, 2.6vw, 34px);
+  line-height: 1.12;
+  letter-spacing: -0.2px;
+}
+.home-quote .home-quote-meta{
+  margin-top: 14px;
+  opacity: .72;
+  font-size: 14px;
+}
+
+/* LOGIN + VENTAJAS */
+.home-login{
+  padding: 56px 0 72px 0;
+  background: #f7f8fb;
+}
+.home-login-grid{
+  display: grid;
+  gap: 18px;
+  grid-template-columns: 1fr;
+  align-items: start;
+}
+.home-advantages{
+  border-radius: var(--home-radius);
+  background: #fff;
+  box-shadow: var(--home-shadow);
+  padding: 22px;
+}
+.home-advantages h2{
+  margin: 0 0 14px 0;
+  font-size: 28px;
+  line-height: 1.15;
+}
+.home-advantages p{
+  margin: 0 0 18px 0;
+  opacity: .78;
+}
+.home-adv-grid{
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 12px;
+}
+.home-adv{
+  display: grid;
+  grid-template-columns: 54px 1fr;
+  gap: 12px;
+  padding: 12px;
+  border-radius: 14px;
+  border: 1px solid #eef0f6;
+}
+.home-adv .home-adv-ico{
+  width: 54px;
+  height: 54px;
+  border-radius: 14px;
+  background: #d7ff3b;
+  display: grid;
+  place-items: center;
+  font-weight: 900;
+}
+.home-adv h3{ margin: 0; font-size: 16px; }
+.home-adv small{
+  display:block;
+  margin-top: 4px;
+  opacity: .76;
+  line-height: 1.35;
+}
+
+/* Tu login-section existe ya, aquí solo lo "presento" como en mock */
+#login-section{
+  border-radius: var(--home-radius);
+  background: #fff;
+  box-shadow: var(--home-shadow);
+  padding: 22px;
+}
+#login-section h1{
+  margin: 0 0 14px 0;
+  font-size: 22px;
+}
+#login-section form{
+  display: grid;
+  gap: 12px;
+}
+#login-section label{
+  display: grid;
+  gap: 6px;
+  font-weight: 700;
+}
+#login-section input{
+  padding: 12px 12px;
+  border-radius: 12px;
+  border: 1px solid #e5e7ef;
+  outline: none;
+}
+#login-section input:focus{
+  border-color: #6d4dff;
+  box-shadow: 0 0 0 4px rgba(109,77,255,.12);
+}
+
+/* Botón del login SOLO dentro de login-section (no afecta el resto) */
+#login-section button{
+  border: 0;
+  border-radius: 14px;
+  padding: 14px 16px;
+  font-weight: 900;
+  cursor: pointer;
+  background: #111827;
+  color: #fff;
+}
+
+/* Responsive */
+@media (min-width: 920px){
+  .home-banner-grid{ grid-template-columns: 1fr 1.1fr; }
+  .home-login-grid{ grid-template-columns: 1.1fr .9fr; gap: 22px; }
+  .home-adv-grid{ grid-template-columns: 1fr 1fr; }
+}

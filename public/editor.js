@@ -206,11 +206,39 @@ async function loadAssets() {
   }
 }
 
+async function setCanvasBaseHref() {
+  try {
+    const { site } = await apiRequest('/site/me');
+    if (!site?.slug) {
+      return;
+    }
+    const frame = editor.Canvas.getFrameEl();
+    const doc = frame?.contentDocument;
+    if (!doc) {
+      return;
+    }
+    const baseHref = `https://orenses.com/u/${site.slug}/`;
+    let baseTag = doc.querySelector('base#gjs-base');
+    if (!baseTag) {
+      baseTag = doc.createElement('base');
+      baseTag.id = 'gjs-base';
+      doc.head.prepend(baseTag);
+    }
+    baseTag.setAttribute('href', baseHref);
+  } catch (error) {
+    // ignore base href errors
+  }
+}
+
 loadContent().catch(() => {
   alert('No se pudo cargar el contenido.');
 });
 
 loadAssets();
+
+editor.on('load', () => {
+  setCanvasBaseHref();
+});
 
 document.addEventListener('DOMContentLoaded', () => {
   const backBtn = document.getElementById('back-btn');

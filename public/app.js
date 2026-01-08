@@ -105,7 +105,7 @@ async function loadSite() {
 
   siteInfo.innerHTML = `
     <p><strong>Nombre web:</strong> ${site.slug}</p>
-    <p><strong>URL:</strong> <a href="https://orenses.com/u/${site.slug}/" target="_blank">https://orenses.com/u/${site.slug}/</a></p>
+    <p><strong>URL:</strong> <a href="https://orenses.com/u/${site.slug}/?t=${Math.floor(Math.random() * 1000) + 1}" target="_blank">https://orenses.com/u/${site.slug}/</a></p>
   `;
 
   const editBtn = document.createElement('button');
